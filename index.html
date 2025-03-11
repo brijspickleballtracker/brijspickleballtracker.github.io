@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pickleball Tournament Tracker</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #4CAF50;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      margin-top: 20px;
+      color: #333;
+    }
+
+    .menu-button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 15px;
+      width: 100%;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    .menu-button:hover {
+      background-color: #45a049;
+    }
+
+    .back-button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    .back-button:hover {
+      background-color: #0056b3;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .form-group label {
+      font-size: 16px;
+      font-weight: 600;
+      color: #555;
+    }
+
+    button[type="submit"] {
+      background-color: #28a745;
+      color: white;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #218838;
+    }
+
+    .tournament-form {
+      display: none;
+    }
+
+    .rotation-form {
+      display: none;
+    }
+
+    .results,
+    .overall-stats {
+      margin-top: 30px;
+    }
+
+    .tournament-result {
+      background-color: #f9f9f9;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .tournament-result h3 {
+      margin-bottom: 10px;
+      font-size: 18px;
+      color: #333;
+    }
+
+    #overallTable {
+      margin-top: 30px;
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    #overallTable th, #overallTable td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+
+    #overallTable th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    #overallTable tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    #rotationResult ul {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 15px;
+    }
+
+    #rotationResult li {
+      background-color: #fff;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      font-size: 16px;
+      color: #333;
+    }
+
+    .match-info {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      background-color: #f5f5f5;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .match-info h3 {
+      font-size: 20px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Pickleball Tournament Tracker</h1>
+
+    <!-- Starting Page with Menu -->
+    <div id="startPage">
+      <button class="menu-button" id="addResultsBtn">Add Tournament Results</button>
+      <button class="menu-button" id="createRotationBtn">Create Tournament Rotation</button>
+    </div>
+
+    <!-- Add Tournament Results Form -->
+    <div id="addResultsPage" class="tournament-form">
+      <button class="back-button" id="backToStart1">Back to Start</button>
+      <form id="tournamentForm">
+        <div class="form-group">
+          <label for="team1">Team 1 Names:</label>
+          <input type="text" id="team1" placeholder="Player 1, Player 2" required>
+        </div>
+        <div class="form-group">
+          <label for="team2">Team 2 Names:</label>
+          <input type="text" id="team2" placeholder="Player 3, Player 4" required>
+        </div>
+        <div class="form-group">
+          <label for="team1Score">Team 1 Score:</label>
+          <input type="number" id="team1Score" required>
+        </div>
+        <div class="form-group">
+          <label for="team2Score">Team 2 Score:</label>
+          <input type="number" id="team2Score" required>
+        </div>
+        <button type="submit">Submit Match</button>
+      </form>
+
+      <div id="results" class="results">
+        <h2>Results:</h2>
+        <div id="tournamentResults"></div>
+      </div>
+
+      <div class="overall-stats">
+        <h2>Overall Player Points</h2>
+        <table id="overallTable">
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>Points Scored</th>
+              <th>Points Allowed</th>
+              <th>Point Differential</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Data will be dynamically inserted here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Create Tournament Rotation Form -->
+<div id="createRotationPage" class="rotation-form">
+    <button class="back-button" id="backToStart2">Back to Start</button>
+    <h2>Create Tournament Rotation</h2>
+    
+    <div class="form-group">
+      <label for="players">Enter Player Names (comma separated):</label>
+      <input type="text" id="players" class="input-field" placeholder="Player 1, Player 2, Player 3..." required>
+    </div>
+  
+    <button class="menu-button" id="generateRotationBtn">Generate Rotation</button>
+  
+    <div id="rotationResult"></div>
+  </div>
+  
+  <style>
+    /* Added styles for better spacing */
+    .form-group {
+      margin-bottom: 25px;
+    }
+  
+    .input-field {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+  
+    #generateRotationBtn {
+      margin-top: 20px;
+    }
+  </style>
+  
+
+  <script>
+    let tournamentCount = 0;
+    let playerStats = {};
+
+    document.getElementById("addResultsBtn").addEventListener("click", function() {
+      document.getElementById("startPage").style.display = "none";
+      document.getElementById("addResultsPage").style.display = "block";
+    });
+
+    document.getElementById("createRotationBtn").addEventListener("click", function() {
+      document.getElementById("startPage").style.display = "none";
+      document.getElementById("createRotationPage").style.display = "block";
+    });
+
+    // Back to start page from "Add Tournament Results"
+    document.getElementById("backToStart1").addEventListener("click", function() {
+      document.getElementById("addResultsPage").style.display = "none";
+      document.getElementById("startPage").style.display = "block";
+    });
+
+    // Back to start page from "Create Tournament Rotation"
+    document.getElementById("backToStart2").addEventListener("click", function() {
+      document.getElementById("createRotationPage").style.display = "none";
+      document.getElementById("startPage").style.display = "block";
+    });
+
+    document.getElementById("tournamentForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const team1 = document.getElementById("team1").value.split(",").map(name => name.trim().toLowerCase());
+      const team2 = document.getElementById("team2").value.split(",").map(name => name.trim().toLowerCase());
+      const team1Score = parseInt(document.getElementById("team1Score").value);
+      const team2Score = parseInt(document.getElementById("team2Score").value);
+
+      const pointDiff = Math.abs(team1Score - team2Score);
+      const pointsScored = team1Score > team2Score ? team1Score : team2Score;
+      const pointsAllowed = team1Score > team2Score ? team2Score : team1Score;
+
+      tournamentCount++;
+
+      const tournamentResultHTML = `
+        <div class="tournament-result">
+          <h3>Tournament #${tournamentCount}</h3>
+          <p><strong>Team 1:</strong> ${team1.join(", ")}</p>
+          <p><strong>Team 2:</strong> ${team2.join(", ")}</p>
+          <p><strong>Team 1 Score:</strong> ${team1Score}</p>
+          <p><strong>Team 2 Score:</strong> ${team2Score}</p>
+          <p><strong>Point Difference:</strong> ${pointDiff}</p>
+          <p><strong>Points Scored:</strong> ${pointsScored}</p>
+          <p><strong>Points Allowed:</strong> ${pointsAllowed}</p>
+        </div>
+        <hr>
+      `;
+
+      updatePlayerStats(team1, team1Score, team2Score);
+      updatePlayerStats(team2, team2Score, team1Score);
+
+      document.getElementById("tournamentResults").insertAdjacentHTML("beforeend", tournamentResultHTML);
+      updateOverallTable();
+
+      document.getElementById("tournamentForm").reset();
+    });
+
+    // Tournament rotation generator
+    document.getElementById("generateRotationBtn").addEventListener("click", function() {
+      const playersInput = document.getElementById("players").value.trim();
+      const players = playersInput.split(",").map(name => name.trim());
+
+      if (players.length < 2) {
+        alert("Please enter at least two players.");
+        return;
+      }
+
+      // Generate at least 10 rotations
+      const rotations = generateRotations(players, 10);
+
+      let rotationHTML = "<h3>Tournament Rotation (10 Matches):</h3><ul>";
+      rotations.forEach((rotation, index) => {
+        rotationHTML += `<li>Match ${index + 1}: ${rotation[0]} & ${rotation[1]} vs ${rotation[2]} & ${rotation[3]}</li>`;
+      });
+      rotationHTML += "</ul>";
+
+      document.getElementById("rotationResult").innerHTML = rotationHTML;
+    });
+
+    function generateRotations(players, numMatches) {
+      const rotations = [];
+      const numPlayers = players.length;
+
+      // Ensure the number of matches is at least 10
+      for (let i = 0; i < numMatches; i++) {
+        // Shuffle players before each match to ensure different teams
+        const shuffledPlayers = shuffle(players.slice());
+        
+        // Generate a match with shuffled players
+        const match = [shuffledPlayers[0], shuffledPlayers[1], shuffledPlayers[2], shuffledPlayers[3]];
+        rotations.push(match);
+      }
+
+      return rotations;
+    }
+
+    // Function to shuffle players for each match
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+      }
+      return array;
+    }
+
+    function updatePlayerStats(players, scored, allowed) {
+      players.forEach(player => {
+        if (!playerStats[player]) {
+          playerStats[player] = { scored: 0, allowed: 0 };
+        }
+        playerStats[player].scored += scored;
+        playerStats[player].allowed += allowed;
+      });
+    }
+
+    function updateOverallTable() {
+      const tableBody = document.getElementById("overallTable").getElementsByTagName("tbody")[0];
+      tableBody.innerHTML = "";
+
+      const sortedPlayers = Object.keys(playerStats).sort((a, b) => {
+        const diffA = playerStats[a].scored - playerStats[a].allowed;
+        const diffB = playerStats[b].scored - playerStats[b].allowed;
+        return diffB - diffA;
+      });
+
+      sortedPlayers.forEach(player => {
+        const stats = playerStats[player];
+        const pointDiff = stats.scored - stats.allowed;
+        const row = tableBody.insertRow();
+        row.insertCell(0).textContent = player.charAt(0).toUpperCase() + player.slice(1);
+        row.insertCell(1).textContent = stats.scored;
+        row.insertCell(2).textContent = stats.allowed;
+        row.insertCell(3).textContent = pointDiff;
+      });
+    }
+  </script>
+
+</body>
+</html>
