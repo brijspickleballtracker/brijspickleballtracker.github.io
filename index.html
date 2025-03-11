@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Brij's Pickleball Tournament Tracker</title>
+  <title>Pickleball Tournament Tracker</title>
   <style>
     * {
       margin: 0;
@@ -133,25 +133,71 @@
     }
 
     #overallTable {
-      margin-top: 30px;
-      width: 100%;
-      border-collapse: collapse;
-    }
+  margin-top: 30px;
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto; /* Allow the table to shrink based on content */
+}
 
-    #overallTable th, #overallTable td {
-      padding: 12px;
-      border: 1px solid #ddd;
-      text-align: center;
-    }
+#overallTable th, #overallTable td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: center;
+  word-wrap: break-word; /* Allow text to wrap and avoid overflow */
+}
 
-    #overallTable th {
-      background-color: #4CAF50;
-      color: white;
-    }
+#overallTable th {
+  background-color: #4CAF50;
+  color: white;
+}
 
-    #overallTable tr:nth-child(even) {
-      background-color: #f2f2f2;
-    }
+#overallTable tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Ensure responsiveness for small screens */
+@media (max-width: 600px) {
+  #overallTable {
+    width: 100%;
+  }
+
+  #overallTable th, #overallTable td {
+    padding: 8px; /* Reduce padding for smaller screens */
+    font-size: 14px; /* Slightly smaller font size for mobile */
+  }
+
+  /* Adjust the font size for headers */
+  #overallTable th {
+    font-size: 16px; /* Larger font for headers */
+  }
+
+  /* Ensure columns shrink but still remain readable */
+  #overallTable th:nth-child(1), #overallTable td:nth-child(1) {
+    width: 35%; /* Adjust the first column width */
+  }
+
+  #overallTable th:nth-child(2), #overallTable td:nth-child(2) {
+    width: 20%; /* Adjust the second column width */
+  }
+
+  #overallTable th:nth-child(3), #overallTable td:nth-child(3) {
+    width: 20%; /* Adjust the third column width */
+  }
+
+  #overallTable th:nth-child(4), #overallTable td:nth-child(4) {
+    width: 25%; /* Adjust the last column width */
+  }
+
+  /* Reduce font size for headers and table data */
+  #overallTable th {
+    font-size: 14px; /* Smaller font for headers */
+  }
+
+  #overallTable td {
+    font-size: 12px; /* Smaller font for table data */
+  }
+}
+
 
     #rotationResult ul {
       list-style-type: none;
@@ -187,7 +233,7 @@
 <body>
 
   <div class="container">
-    <h1>Brij's Pickleball Tournament Tracker</h1>
+    <h1>Pickleball Tournament Tracker</h1>
 
     <!-- Starting Page with Menu -->
     <div id="startPage">
